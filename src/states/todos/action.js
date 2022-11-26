@@ -1,8 +1,9 @@
 import mockAPI from '../../data/mockAPI';
+import { ActionType } from '../../utils/ActionType';
 
 const addTodoActionCreator = ({ id, text }) => {
   return {
-    type: 'ADD_TODO',
+    type: ActionType.ADD_TODO,
     payload: {
       id,
       text,
@@ -14,7 +15,7 @@ const addTodoActionCreator = ({ id, text }) => {
 //Menghapus todo
 const deleteTodoActionCreator = (id) => {
   return {
-    type: 'DELETE_TODO',
+    type: ActionType.DELETE_TODO,
     payload: {
       id
     }
@@ -24,7 +25,7 @@ const deleteTodoActionCreator = (id) => {
 // toggle
 const toggleTodoActionCreator = (id) => {
   return {
-    type: 'TOGGLE_TODO',
+    type: ActionType.TOGGLE_TODO,
     payload: {
       id
     }
@@ -33,7 +34,7 @@ const toggleTodoActionCreator = (id) => {
 
 const receiveTodosActionCreator = (todos) => {
   return {
-    type: 'RECEIVE_TODOS',
+    type: ActionType.RECEIVE_TODOS,
     payload: {
       todos
     }
@@ -56,15 +57,25 @@ const asyncAddTodo = (text) => {
 
 const asyncDeleteTodo = (id) => {
   return async (dispatch) => {
-    await mockAPI.deleteTodo(id);
     dispatch(deleteTodoActionCreator(id));
+    try {
+      await mockAPI.deleteTodo(id);
+    } catch (error) {
+      alert(error.message);
+      dispatch(deleteTodoActionCreator(id));
+    }
   };
 };
 
 const asyncToggleTodo = (id) => {
   return async (dispatch) => {
-    await mockAPI.toggleTodo(id);
     dispatch(toggleTodoActionCreator(id));
+    try {
+      await mockAPI.toggleTodo(id);
+    } catch (error) {
+      alert(error.message);
+      dispatch(toggleTodoActionCreator(id));
+    }
   };
 };
 
